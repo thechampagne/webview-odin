@@ -1,8 +1,10 @@
 package webview
 
-when ODIN_OS == .Windows do foreign import webview "webview.lib"
-when ODIN_OS != .Windows do foreign import webview "system:webview"
+/* when ODIN_OS == .Windows do foreign import webview "webview.lib"
+when ODIN_OS != .Windows do foreign import webview "system:webview" */
 
+when ODIN_OS == .Windows do foreign import webview "system:webview.lib"
+when ODIN_OS != .Windows do foreign import webview "system:webview"
 import "core:c"
 
 VERSION_MAJOR :: 0
