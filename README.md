@@ -8,6 +8,11 @@ Odin binding for a tiny cross-platform **webview** library to build modern cross
 <img src="https://raw.githubusercontent.com/thechampagne/webview-odin/main/.github/assets/screenshot.png"/>
 </p>
 
+## Getting Started
+### Windows 
+
+Include the built DLL in the directory of your project
+
 ### References
  - [webview](https://github.com/webview/webview)
 
