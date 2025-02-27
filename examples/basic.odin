@@ -1,6 +1,6 @@
 package main
 
-import "./webview"
+import webview "../"
 
 main :: proc() {
     w : webview.webview = webview.create(false, nil)
