@@ -51,8 +51,7 @@ Error :: enum c.int {
 @(default_calling_convention="c")
 foreign lib {
 
-    @(link_name="webview_create")
-    create :: proc(debug : c.int, window : rawptr) -> webview ---
+    webview_create :: proc(debug : c.int, window : rawptr) -> webview ---
 
     @(link_name="webview_destroy")
     destroy :: proc(w : webview) -> Error ---
@@ -102,4 +101,8 @@ foreign lib {
     @(link_name="webview_version")
     version :: proc() -> ^Version_Info ---
 
+}
+
+create :: proc(debug: bool, window : rawptr) -> webview {
+       return webview_create(cast(c.int)debug, window)
 }
