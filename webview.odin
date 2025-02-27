@@ -1,6 +1,43 @@
 package webview
 
-foreign import lib "system:webview"
+SHARED :: #config(SHARED, false)
+LOCAL :: #config(LOCAL, false)
+
+when ODIN_OS == .Windows  {
+    when LOCAL {
+        foreign import lib "webview.lib" 
+    } else {
+        foreign import lib "system:webview.lib"
+    }
+} else when ODIN_OS == .Darwin {
+    when SHARED {
+        when LOCAL {
+            foreign import lib "libwebview.dylib" 
+	} else {
+            foreign import lib "system:libwebview.dylib"
+	}
+    } else {
+	when LOCAL {
+            foreign import lib "libwebview.a"
+	} else {
+            foreign import lib "system:libwebview.a"
+	}
+    }
+} else {
+    when SHARED {
+        when LOCAL {
+            foreign import lib "libwebview.so" 
+	} else {
+            foreign import lib "system:libwebview.so"
+	}
+    } else {
+	when LOCAL {
+            foreign import lib "libwebview.a"
+	} else {
+            foreign import lib "system:libwebview.a"
+	}
+    }
+}
 
 import "core:c"
 
