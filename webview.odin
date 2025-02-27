@@ -1,82 +1,105 @@
 package webview
 
-foreign import "system:webview"
+foreign import lib "system:webview"
 
 import "core:c"
 
 VERSION_MAJOR :: 0
-VERSION_MINOR :: 10
+VERSION_MINOR :: 12
 VERSION_PATCH :: 0
-VERSION_NUMBER :: "0.10.0"
-HINT_NONE :: 0
-HINT_MIN :: 1
-HINT_MAX :: 2
-HINT_FIXED :: 3
+VERSION_NUMBER :: "0.12.0"
 
-webview_t :: rawptr
+Hint :: enum c.int {
+  None,
+  Min,
+  Max,
+  Fixed
+}
 
-webview_version_t :: struct {
+webview :: rawptr
+
+Version :: struct {
     major : c.uint,
     minor : c.uint,
     patch : c.uint,
 }
 
-webview_version_info_t :: struct {
-    version : webview_version_t,
+Version_Info :: struct {
+    version : Version,
     version_number : [32]c.char,
     pre_release : [48]c.char,
     build_metadata : [48]c.char,
 }
 
+Native_Handle_Kind :: enum c.int {
+   UI_Window,
+   UI_Widget,
+   Browser_Controller
+}
+
+Error :: enum c.int {
+  Missing_Dependency = -5,
+  Canceled = -4,
+  Invalid_State = -3,
+  Invalid_Argument = -2,
+  Unspecified = -1,
+  Ok = 0,
+  Duplicate = 1,
+  Not_Found = 2
+}
+	
 @(default_calling_convention="c")
-foreign webview {
+foreign lib {
 
     @(link_name="webview_create")
-    create :: proc(debug : c.int, window : rawptr) -> webview_t ---
+    create :: proc(debug : c.int, window : rawptr) -> webview ---
 
     @(link_name="webview_destroy")
-    destroy :: proc(w : webview_t) ---
+    destroy :: proc(w : webview) -> Error ---
 
     @(link_name="webview_run")
-    run :: proc(w : webview_t) ---
+    run :: proc(w : webview) -> Error ---
 
-    @(link_name="webview_terminate")
-    terminate :: proc(w : webview_t) ---
+    @(link_name="webviewerminate")
+    terminate :: proc(w : webview) -> Error ---
 
     @(link_name="webview_dispatch")
-    dispatch :: proc(w : webview_t, fn: #type proc(w : webview_t, arg : rawptr), arg : rawptr) ---
+    dispatch :: proc(w : webview, fn: #type proc(w : webview, arg : rawptr), arg : rawptr) -> Error ---
 
     @(link_name="webview_get_window")
-    get_window :: proc(w : webview_t) -> rawptr ---
+    get_window :: proc(w : webview) -> rawptr ---
+
+    @(link_name="webview_get_native_handle")
+    get_native_handle :: proc(w : webview, kind: Native_Handle_Kind) -> rawptr ---
 
     @(link_name="webview_set_title")
-    set_title :: proc(w : webview_t, title : cstring) ---
+    set_title :: proc(w : webview, title : cstring) -> Error ---
 
     @(link_name="webview_set_size")
-    set_size :: proc(w : webview_t, width : c.int, height : c.int, hints : c.int) ---
+    set_size :: proc(w : webview, width : c.int, height : c.int, hints : Hint) -> Error ---
 
     @(link_name="webview_navigate")
-    navigate :: proc(w : webview_t, url : cstring) ---
+    navigate :: proc(w : webview, url : cstring) -> Error ---
 
     @(link_name="webview_set_html")
-    set_html :: proc(w : webview_t, html : cstring) ---
+    set_html :: proc(w : webview, html : cstring) -> Error ---
 
     @(link_name="webview_init")
-    init :: proc(w : webview_t, js : cstring) ---
+    init :: proc(w : webview, js : cstring) -> Error ---
 
     @(link_name="webview_eval")
-    eval :: proc(w : webview_t, js : cstring) ---
+    eval :: proc(w : webview, js : cstring) -> Error ---
 
     @(link_name="webview_bind")
-    bind :: proc(w : webview_t, name : cstring, fn : #type proc(seq : cstring, req : cstring, arg : rawptr), arg : rawptr) ---
+    bind :: proc(w : webview, name : cstring, fn : #type proc(seq : cstring, req : cstring, arg : rawptr), arg : rawptr) -> Error ---
 
     @(link_name="webview_unbind")
-    unbind :: proc(w : webview_t, name : cstring) ---
+    unbind :: proc(w : webview, name : cstring) -> Error ---
 
     @(link_name="webview_return")
-    ret :: proc(w : webview_t, seq : cstring, status : c.int, result : cstring) ---
+    ret :: proc(w : webview, seq : cstring, status : c.int, result : cstring) -> Error ---
 
     @(link_name="webview_version")
-    version :: proc() -> ^webview_version_info_t ---
+    version :: proc() -> ^Version_Info ---
 
 }
