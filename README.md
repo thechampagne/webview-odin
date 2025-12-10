@@ -8,6 +8,15 @@ Odin binding for a tiny cross-platform **webview** library to build modern cross
 <img src="https://raw.githubusercontent.com/thechampagne/webview-odin/main/.github/assets/screenshot.png"/>
 </p>
 
+### Command-line defines
+
+Define    | Description
+-------   |-------------
+`SHARED`* | Link `webview` as shared/dynamic library. **(false by default)**
+`LOCAL`   | Location of `webview`, local or system path. **(false - system path by defualt )**
+
+*: Only for Unix and macOS. Windows link with `.lib` even with shared/dynamic library.
+
 ### API
 
 ```odin
