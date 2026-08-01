@@ -96,7 +96,7 @@ foreign lib {
     @(link_name="webview_run")
     run :: proc(w : webview) -> Error ---
 
-    @(link_name="webviewerminate")
+    @(link_name="webview_terminate")
     terminate :: proc(w : webview) -> Error ---
 
     @(link_name="webview_dispatch")
